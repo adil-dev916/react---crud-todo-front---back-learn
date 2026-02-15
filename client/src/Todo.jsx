@@ -7,6 +7,7 @@ import { IoTrashOutline } from "react-icons/io5";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 
 const API_URL = "http://localhost:3000/api/todo";
@@ -30,6 +31,7 @@ const Todo = () => {
 
   // data adding to backend
   const addTodo = async () => {
+    if (inputData == '') return toast.error("Blank?")
     await axios.post(API_URL, { txt: inputData })
     setInputData("")
     fetchTodo();
@@ -108,11 +110,7 @@ const Todo = () => {
 
         <div className='todo-input-div'>
           <div className='he'>
-            <input
-              value={inputData}
-              placeholder='Add Todo'
-              onChange={(e) => setInputData(e.target.value)}
-            />
+            <input value={inputData} placeholder='Add Todo' onChange={(e) => setInputData(e.target.value)} />
             <button onClick={addTodo}>Add</button>
           </div>
 
@@ -124,11 +122,7 @@ const Todo = () => {
 
           {showEdit &&
             <div className='he'>
-              <input
-                value={editData}
-                placeholder='Edit todo'
-                onChange={(e) => setEditData(e.target.value)}
-              />
+              <input value={editData} placeholder='Edit todo' onChange={(e) => setEditData(e.target.value)} />
               <button onClick={updateTodo}>Update</button>
             </div>
           }

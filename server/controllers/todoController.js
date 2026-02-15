@@ -1,22 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
 
-let todo = [
-    {
-        id: "sdfsd-23423-sdfsd-23423",
-        txt: "Learn React",
-        isCom: false
-    },
-    {
-        id: "sdfsd-23423-sdfsd-23424",
-        txt: "Learn Node",
-        isCom: false
-    },
-    {
-        id: "sdfsd-23423-sdfsd-23425",
-        txt: "Learn Express",
-        isCom: false
-    },
-]
+let todo = []
 
 const getTodo = (req, res) => {
     res.status(200).json(todo)
