@@ -4,7 +4,6 @@ import { TbXboxXFilled } from "react-icons/tb";
 import { ImRadioUnchecked } from "react-icons/im";
 import { HiOutlinePencil } from "react-icons/hi2";
 import { IoTrashOutline } from "react-icons/io5";
-import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
@@ -58,19 +57,16 @@ const Todo = () => {
     setShowEdit(false)
   }
 
-  const handlePending = async () => {
-    const res = await axios.get(API_URL);
-    setCmpList(res.data.filter(val => !val.isCom))
-    setFilterShow(true)
-    setShowEdit(false)
-  }
+  const filterTodo = async (type = "all") => {
+    try {
+      const res = await axios.get(`${API_URL}?status=${type}`);
+      setTodoData(res.data);
+      setShowEdit(false);
+    } catch (err) {
+      toast.error("Filter failed");
+    }
+  };
 
-  const handleComplete = async () => {
-    const res = await axios.get(API_URL);
-    setCmpList(res.data.filter(val => val.isCom))
-    setFilterShow(true)
-    setShowEdit(false)
-  }
 
   // EDIT
   const todoEdit = (todo) => {
@@ -78,24 +74,6 @@ const Todo = () => {
     setEditData(todo.txt)
     setEditId(todo.id)
     setShowEdit(true)
-  }
-
-  // FILTERS
-  // const handlePending = () => {
-  //   setCmpList(todoData.filter(val => !val.isCom))
-  //   setFilterShow(true)
-  //   setShowEdit(false)
-  // }
-
-  // const handleComplete = () => {
-  //   setCmpList(todoData.filter(val => val.isCom))
-  //   setFilterShow(true)
-  //   setShowEdit(false)
-  // }
-
-  const handleAllData = () => {
-    setFilterShow(false)
-    setShowEdit(false)
   }
 
   const showList = filterShow ? cmpList : todoData
@@ -115,9 +93,10 @@ const Todo = () => {
           </div>
 
           <div className="todo-filter-btn-main">
-            <button onClick={handleAllData}>All</button>
-            <button onClick={handlePending}>Pending</button>
-            <button onClick={handleComplete}>Completed</button>
+            <button onClick={() => filterTodo("all")}>All</button>
+            <button onClick={() => filterTodo("pending")}>Pending</button>
+            <button onClick={() => filterTodo("completed")}>Completed</button>
+
           </div>
 
           {showEdit &&

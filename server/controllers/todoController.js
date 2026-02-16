@@ -3,8 +3,19 @@ const { v4: uuidv4 } = require("uuid");
 let todo = []
 
 const getTodo = (req, res) => {
-    res.status(200).json(todo)
-}
+    const { status } = req.query;
+
+    let result = todo;
+
+    if (status === "pending") {
+        result = todo.filter(t => !t.isCom);
+    } else if (status === "completed") {
+        result = todo.filter(t => t.isCom);
+    }
+
+    res.status(200).json(result);
+};
+
 
 const addTodo = (req, res) => {
     const newTodo = {
