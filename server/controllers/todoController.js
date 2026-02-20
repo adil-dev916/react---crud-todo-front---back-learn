@@ -1,45 +1,65 @@
 const { v4: uuidv4 } = require("uuid");
+const Todo = require("../model/Todo");
 
 let todo = []
 
-const getTodo = (req, res) => {
+const getTodo = async (req, res) => {
     const { status } = req.query;
 
-    let result = todo;
+    // let result = todo;
+
+    // if (status === "pending") {
+    //     result = todo.filter(t => !t.isCom);
+    // } else if (status === "completed") {
+    //     result = todo.filter(t => t.isCom);
+    // }
+
+    // res.status(200).json(result);
+
+    const todos = await Todo.find();
+
+    let result = todos;
 
     if (status === "pending") {
         result = todo.filter(t => !t.isCom);
     } else if (status === "completed") {
         result = todo.filter(t => t.isCom);
     }
-
     res.status(200).json(result);
 };
 
+const addTodo = async (req, res) => {
+    // const newTodo = {
+    //     id: uuidv4(),
+    //     txt: req.body.txt,
+    //     isCom: false,
+    // };
 
-const addTodo = (req, res) => {
-    const newTodo = {
-        id: uuidv4(),
-        txt: req.body.txt,
-        isCom: false,
-    };
+    // todo.push(newTodo)
 
-    todo.push(newTodo)
+    // res.status(201).json(newTodo);
+    // const {txt} = req.body;
 
-    res.status(201).json(newTodo);
+    const todo = await Todo.create(req.body);
+    res.status(201).json(todo)
+
 }
 
-const todoUpdate = (req, res) => {
-    todo = todo.map(todos => todos.id == req.params.id
-        ? { ...todos, txt: req.body.txt }
-        : todos
-    )
-    res.json({ message: "Todo updated" })
+const todoUpdate = async (req, res) => {
+    // todo = todo.map(todos => todos.id == req.params.id
+    //     ? { ...todos, txt: req.body.txt }
+    //     : todos
+    // )
+    // res.json({ message: "Todo updated" })
+    const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(todo);
 }
 
-const todoDelete = (req, res) => {
-    todo = todo.filter(todo => todo.id != req.params.id);
-    res.json({ message: "Todo deleted" })
+const todoDelete = async (req, res) => {
+    // todo = todo.filter(todo => todo.id != req.params.id);
+    // res.json({ message: "Todo deleted" })
+    await Todo.findByIdAndDelete(req.params.id);
+    res.json({ message: "Todo Deleted" })
 }
 
 

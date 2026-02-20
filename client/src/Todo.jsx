@@ -31,15 +31,24 @@ const Todo = () => {
   // data adding to backend
   const addTodo = async () => {
     if (inputData == '') return toast.error("Blank?")
-    await axios.post(API_URL, { txt: inputData })
-    setInputData("")
-    fetchTodo();
+    try {
+      await axios.post(API_URL, { txt: inputData })
+      setInputData("")
+      fetchTodo();
+      toast.success("Todo Added")
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // data delete from backend
   const deleteTodo = async (id) => {
-    await axios.delete(`${API_URL}/${id}`);
-    fetchTodo();
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      fetchTodo();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // COMPLETE
@@ -57,7 +66,8 @@ const Todo = () => {
     setShowEdit(false)
   }
 
-  const filterTodo = async (type = "all") => {
+  // data filtering (backend)
+  const filterTodo = async (type = "all") => { 
     try {
       const res = await axios.get(`${API_URL}?status=${type}`);
       setTodoData(res.data);
@@ -66,7 +76,6 @@ const Todo = () => {
       toast.error("Filter failed");
     }
   };
-
 
   // EDIT
   const todoEdit = (todo) => {

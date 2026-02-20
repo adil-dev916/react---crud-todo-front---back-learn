@@ -1,6 +1,11 @@
 const express = require('express');
 const cors = require("cors");
 const router = require('./routes/todoRoutes');
+const mongoose = require("mongoose");
+const connectDb = require('./config/db');
+
+require("dotenv").config();
+connectDb()
 
 const app = express();
 const PORT = 3000;
