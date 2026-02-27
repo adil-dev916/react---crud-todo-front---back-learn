@@ -67,7 +67,7 @@ const Todo = () => {
   }
 
   // data filtering (backend)
-  const filterTodo = async (type = "all") => { 
+  const filterTodo = async (type = "all") => {
     try {
       const res = await axios.get(`${API_URL}?status=${type}`);
       setTodoData(res.data);
@@ -81,7 +81,7 @@ const Todo = () => {
   const todoEdit = (todo) => {
     if (todo.isCom) return
     setEditData(todo.txt)
-    setEditId(todo.id)
+    setEditId(todo._id)
     setShowEdit(true)
   }
 
@@ -118,10 +118,10 @@ const Todo = () => {
 
         <div>
           {showList.map((value, index) => (
-            <div key={value.id} className='todo-list'>
+            <div key={value._id} className='todo-list'>
 
               <div className='todo-list-items'>
-                <button onClick={() => completeTask(value.id)}>
+                <button onClick={() => completeTask(value._id)}>
                   {value.isCom
                     ? <FaCheckCircle color="white" />
                     : <ImRadioUnchecked color="white" />}
@@ -141,7 +141,7 @@ const Todo = () => {
                     <HiOutlinePencil />
                   </button>
                 }
-                <button onClick={() => deleteTodo(value.id)}>
+                <button onClick={() => deleteTodo(value._id)}>
                   <IoTrashOutline />
                 </button>
               </div>

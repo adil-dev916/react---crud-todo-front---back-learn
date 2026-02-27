@@ -21,10 +21,11 @@ const getTodo = async (req, res) => {
     let result = todos;
 
     if (status === "pending") {
-        result = todo.filter(t => !t.isCom);
+        result = todos.filter(t => !t.isCom);
     } else if (status === "completed") {
-        result = todo.filter(t => t.isCom);
+        result = todos.filter(t => t.isCom);
     }
+
     res.status(200).json(result);
 };
 
@@ -63,12 +64,17 @@ const todoDelete = async (req, res) => {
 }
 
 
-const todoComplete = (req, res) => {
-    todo = todo.map(todos => todos.id == req.params.id
-        ? { ...todos, isCom: !todos.isCom }
-        : todos
-    )
-    res.json({ message: "Todo completed" })
-}
+const todoComplete = async (req, res) => {
+    const todo = await Todo.findById(req.params.id);
+
+    if (!todo) {
+        return res.status(404).json({ message: "Todo not found" });
+    }
+
+    todo.isCom = !todo.isCom;
+    await todo.save();
+
+    res.json(todo);
+};
 
 module.exports = { getTodo, addTodo, todoUpdate, todoDelete, todoComplete }
