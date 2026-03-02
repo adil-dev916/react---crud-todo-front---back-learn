@@ -1,8 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
 const Todo = require("../model/Todo");
 
-let todo = []
-
 const getTodo = async (req, res) => {
     const { status } = req.query;
 

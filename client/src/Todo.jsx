@@ -105,7 +105,6 @@ const Todo = () => {
             <button onClick={() => filterTodo("all")}>All</button>
             <button onClick={() => filterTodo("pending")}>Pending</button>
             <button onClick={() => filterTodo("completed")}>Completed</button>
-
           </div>
 
           {showEdit &&
